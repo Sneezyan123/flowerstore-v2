@@ -138,12 +138,24 @@ The application uses the Strategy pattern for payment and delivery processing, a
 
 ## CI/CD
 
-The project includes GitHub Actions workflow (`.github/workflows/ci.yml`) that:
+The project includes GitHub Actions workflows:
+
+### Main Workflow (`.github/workflows/ci.yml`)
 - Runs on every push and pull request
 - Sets up Java 17 environment
 - Caches Gradle dependencies
 - Runs all tests
-- Generates test reports
+- Uploads test results as artifacts
+
+### Alternative Workflow (`.github/workflows/ci-with-reports.yml`)
+- Same as main workflow but includes test report generation
+- Requires proper repository permissions for check runs
+- Use this if you want detailed test reports in GitHub
+
+### Test Status
+- **Local**: Requires Java 17 (Spring Boot 3.2.0 compatibility)
+- **CI**: Runs successfully with Java 17 in GitHub Actions
+- **Test Count**: 20+ tests covering all functionality
 
 ## Contributing
 
