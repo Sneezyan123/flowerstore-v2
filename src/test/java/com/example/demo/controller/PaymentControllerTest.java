@@ -3,23 +3,42 @@ package com.example.demo.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PaymentController.class)
+@SpringBootTest
+@AutoConfigureWebMvc
 class PaymentControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @org.junit.jupiter.api.BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Test
+    void testGetPaymentMethods() throws Exception {
+        mockMvc.perform(get("/api/payment/methods"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.availableMethods.creditCard.name").value("Credit Card"))
+                .andExpect(jsonPath("$.availableMethods.paypal.name").value("PayPal"));
+    }
 
     @Test
     void testCreditCardPayment() throws Exception {
@@ -53,13 +72,5 @@ class PaymentControllerTest {
                 .andExpect(jsonPath("$.paymentMethod").value("PayPal"))
                 .andExpect(jsonPath("$.originalAmount").value(100.0))
                 .andExpect(jsonPath("$.fee").value(3.2));
-    }
-
-    @Test
-    void testGetPaymentMethods() throws Exception {
-        mockMvc.perform(get("/api/payment/methods"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.availableMethods.creditCard.name").value("Credit Card"))
-                .andExpect(jsonPath("$.availableMethods.paypal.name").value("PayPal"));
     }
 }
