@@ -138,22 +138,38 @@ The application uses the Strategy pattern for payment and delivery processing, a
 
 ## CI/CD
 
-The project includes multiple GitHub Actions workflows:
+The project includes multiple GitHub Actions workflows to handle different scenarios:
 
-### Simple Test Runner (`.github/workflows/simple-test.yml`)
-- **Recommended**: Basic workflow that just runs tests
+### Recommended Workflows
+
+#### 1. Gradle Test Runner (`.github/workflows/gradle-test.yml`)
+- **Most Reliable**: Explicitly handles gradlew permissions
 - Sets up Java 17 environment
-- Runs all tests with `./gradlew test`
-- No artifacts or complex dependencies
+- Makes gradlew executable
+- Runs tests with detailed output
+- Shows test results
 
-### Main Workflow (`.github/workflows/ci.yml`)
+#### 2. Simple Test Runner (`.github/workflows/simple-test.yml`)
+- **Basic**: Minimal workflow
+- Sets up Java 17 environment
+- Makes gradlew executable
+- Runs tests with `--no-daemon`
+
+#### 3. Direct Gradle (`.github/workflows/direct-gradle.yml`)
+- **Alternative**: Uses Gradle directly instead of wrapper
+- Installs Gradle via SDKMAN
+- Runs tests without gradlew dependency
+
+### Advanced Workflows
+
+#### 4. Main Workflow (`.github/workflows/ci.yml`)
 - Full-featured workflow with caching and artifacts
 - Sets up Java 17 environment
 - Caches Gradle dependencies for faster builds
 - Runs all tests
 - Uploads test results as artifacts (v4)
 
-### Alternative Workflow (`.github/workflows/ci-with-reports.yml`)
+#### 5. Alternative Workflow (`.github/workflows/ci-with-reports.yml`)
 - Same as main workflow but includes test report generation
 - Requires proper repository permissions for check runs
 - Use this if you want detailed test reports in GitHub
@@ -163,6 +179,7 @@ The project includes multiple GitHub Actions workflows:
 - **CI**: Runs successfully with Java 17 in GitHub Actions
 - **Test Count**: 24+ tests covering all functionality
 - **Actions**: Updated to latest versions (v4) to avoid deprecation warnings
+- **Permissions**: Fixed gradlew execute permissions issue
 
 ## Contributing
 

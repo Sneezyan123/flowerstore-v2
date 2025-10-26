@@ -1,4 +1,4 @@
-name: Simple Test Runner
+name: Gradle Test Runner
 
 on:
   push:
@@ -19,8 +19,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Setup Gradle Wrapper
+      run: |
+        chmod +x gradlew
+        ./gradlew --version
         
     - name: Run tests
-      run: ./gradlew test --no-daemon
+      run: ./gradlew test --no-daemon --info
+      
+    - name: Show test results
+      run: |
+        echo "Test results:"
+        find build/test-results -name "*.xml" -exec echo "Found: {}" \;

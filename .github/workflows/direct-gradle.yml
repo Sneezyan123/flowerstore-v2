@@ -1,4 +1,4 @@
-name: Simple Test Runner
+name: Direct Gradle Test
 
 on:
   push:
@@ -19,8 +19,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Install Gradle
+      run: |
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install gradle 8.5
         
     - name: Run tests
-      run: ./gradlew test --no-daemon
+      run: gradle test --no-daemon
