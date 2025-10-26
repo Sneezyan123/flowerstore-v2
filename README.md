@@ -138,14 +138,20 @@ The application uses the Strategy pattern for payment and delivery processing, a
 
 ## CI/CD
 
-The project includes GitHub Actions workflows:
+The project includes multiple GitHub Actions workflows:
+
+### Simple Test Runner (`.github/workflows/simple-test.yml`)
+- **Recommended**: Basic workflow that just runs tests
+- Sets up Java 17 environment
+- Runs all tests with `./gradlew test`
+- No artifacts or complex dependencies
 
 ### Main Workflow (`.github/workflows/ci.yml`)
-- Runs on every push and pull request
+- Full-featured workflow with caching and artifacts
 - Sets up Java 17 environment
-- Caches Gradle dependencies
+- Caches Gradle dependencies for faster builds
 - Runs all tests
-- Uploads test results as artifacts
+- Uploads test results as artifacts (v4)
 
 ### Alternative Workflow (`.github/workflows/ci-with-reports.yml`)
 - Same as main workflow but includes test report generation
@@ -155,7 +161,8 @@ The project includes GitHub Actions workflows:
 ### Test Status
 - **Local**: Requires Java 17 (Spring Boot 3.2.0 compatibility)
 - **CI**: Runs successfully with Java 17 in GitHub Actions
-- **Test Count**: 20+ tests covering all functionality
+- **Test Count**: 24+ tests covering all functionality
+- **Actions**: Updated to latest versions (v4) to avoid deprecation warnings
 
 ## Contributing
 
